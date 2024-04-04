@@ -1,110 +1,125 @@
 import java.util.*;
 import java.io.*;
-
-class Vertex implements Comparable<Vertex> {
-	int no;
-	long dis;
-
-	public Vertex(int no, long dis) {
-		this.no = no;
-		this.dis = dis;
-	}
-
-	@Override
-	public int compareTo(Vertex o) {
-		// TODO Auto-generated method stub
-		if(this.dis < o.dis) return -1;
-		else if(this.dis > o.dis) return 1;
-		else return 0;
-	}
-}
-
+	
 public class Main {
-	static int N, M, p, last;
-	static long distance[][];
-	static boolean visit[];
-	static int num[];
-	static long min = 999876454321L;
-	public static void permu(int arr[], int cnt) {
-		if(cnt == 3) {
-			long temp = distance[0][arr[num[0]]] + distance[num[0]][arr[num[1]]] + distance[num[1]][arr[num[2]]] + distance[num[2]][last];
-			min = Math.min(min, temp);
-			return;
-		}
-		
-		for(int i=1; i<=p; i++) {
-			if(!visit[i]) {
-				visit[i] = true;
-				num[cnt] = i;
-				permu(arr,cnt+1);
-				visit[i] = false;
-			}
-		}
-	}
-	public static void main(String[] args) throws IOException {
+	static int N,M,P,start,end;
+	static long INF,min_v;
+	static ArrayList<ArrayList<Node>> graph;
+	static int[] nums,nodes;
+	static long[] min_dis;
+	static boolean[] visited;
+	static HashMap<Integer,long[]> hm;
+	
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringTokenizer st;
+		
+		hm = new HashMap<>();
+		st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
-		ArrayList<Vertex> list[] = new ArrayList[N];
-		//연결관계 정리
-		for (int i = 0; i < N; i++) {
-			list[i] = new ArrayList<>();
+		
+		graph = new ArrayList<ArrayList<Node>>();
+		nums = new int[3];
+		INF = 999876454321L;
+		min_v = 999876454321L;
+		
+		
+		for (int i=0; i<=N; i++) {
+			graph.add(new ArrayList<>());
 		}
-		for (int i = 0; i < M; i++) {
+		
+		for (int i=0; i<M; i++) {
 			st = new StringTokenizer(br.readLine());
-			int start = Integer.parseInt(st.nextToken())-1;
-			int end = Integer.parseInt(st.nextToken())-1;
-			int value = Integer.parseInt(st.nextToken());
-			list[start].add(new Vertex(end, value));
-			list[end].add(new Vertex(start, value));
+			int u = Integer.parseInt(st.nextToken());
+			int v = Integer.parseInt(st.nextToken());
+			int w = Integer.parseInt(st.nextToken());
+			graph.get(u).add(new Node(v,w));
+			graph.get(v).add(new Node(u,w));
 		}
-		//시작 끝 지점 입력
-		st = new StringTokenizer(br.readLine());
-		int start = Integer.parseInt(st.nextToken())-1;
-		last = Integer.parseInt(st.nextToken())-1;
-		p = Integer.parseInt(br.readLine());
 		
-		//순열을 위한
-		visit = new boolean[p+1];
-		num = new int[3];
-		
-		//거치는 점들
-		int arr[] = new int[p + 1];
 		st = new StringTokenizer(br.readLine());
-		//시작지점은 0
-		arr[0] = start;
-		for (int i = 1; i < p+1; i++) {
-			arr[i] = Integer.parseInt(st.nextToken())-1;
+		start = Integer.parseInt(st.nextToken());
+		end = Integer.parseInt(st.nextToken());
+		
+		P = Integer.parseInt(br.readLine());
+		nodes = new int[P];
+		visited = new boolean[P];
+		
+		st = new StringTokenizer(br.readLine());
+		for (int i=0; i<P; i++) {
+			nodes[i] = Integer.parseInt(st.nextToken());
 		}
-		//다익스트라 p+1개
-		distance = new long[p+1][N];
-		for (int i = 0; i <p+1; i++) {
-			Arrays.fill(distance[i], 999876454321L);
-			distance[i][arr[i]]= 0;
+		
+		hm.put(start, dijkstra(start));
+		for (int i=0; i<P; i++) {
+			hm.put(nodes[i],dijkstra(nodes[i]));
 		}
-		//다익스트라 돌기
-		for (int i = 0; i < p + 1; i++) {
-			PriorityQueue<Vertex> pq = new PriorityQueue<>();
-			pq.add(new Vertex(arr[i], 0));
-			while (!pq.isEmpty()) {
-				Vertex cur = pq.poll();
-				if (distance[i][cur.no] < cur.dis)
-					continue;
-				for (int j = 0; j < list[cur.no].size(); j++) {
-					Vertex next = list[cur.no].get(j);
-					if (distance[i][next.no] > cur.dis + next.dis) {
-						distance[i][next.no] = cur.dis + next.dis;
-						pq.add(new Vertex(next.no, distance[i][next.no]));
-					}
+				
+		perm(0);
+		System.out.println(min_v == 999876454321L ? -1 : min_v);
+	}
+	
+	static void perm(int cnt) {
+		if (cnt == 3) {
+			long tmp = 0;
+		
+			tmp += hm.get(start)[nums[0]];
+			tmp += hm.get(nums[0])[nums[1]];
+			tmp += hm.get(nums[1])[nums[2]];
+			tmp += hm.get(nums[2])[end];
+
+			min_v = Math.min(min_v, tmp);
+			return;
+		}
+
+		
+		for (int i=0; i<P; i++) {
+			
+			if (visited[i]) continue;
+			
+			nums[cnt] = nodes[i];
+			visited[i] = true;
+			perm(cnt+1);
+			visited[i] = false;
+			
+		}
+	}
+	
+	static long[] dijkstra(int start) {
+		PriorityQueue<Node> pq = new PriorityQueue<>();
+		min_dis = new long[N+1];
+		Arrays.fill(min_dis,INF);
+		min_dis[start] = 0;
+		pq.offer(new Node(start,0));
+		
+		while (!pq.isEmpty()) {
+			Node cur = pq.poll();
+			
+			if (min_dis[cur.node] < cur.cost) continue;
+			
+			for (Node next: graph.get(cur.node)) {
+				if (min_dis[next.node] > next.cost + cur.cost) {
+					min_dis[next.node] = next.cost + cur.cost;
+					pq.offer(new Node(next.node, next.cost+cur.cost));
 				}
 			}
 		}
-		//순열
-		permu(arr,0);
+		return min_dis;
+	}
+	
+	static class Node implements Comparable<Node>{
+		int node;
+		long cost;
 		
-		if(min == 999876454321L) min = -1;
-		System.out.println(min);
-		br.close();
+		public Node(int node, long cost) {
+			this.node = node;
+			this.cost = cost;
+		}
+		@Override
+		public int compareTo(Node o) {
+//				return (int) ((int) this.cost - o.cost);
+			return Long.compare(this.cost, o.cost);
+		}
 	}
 }

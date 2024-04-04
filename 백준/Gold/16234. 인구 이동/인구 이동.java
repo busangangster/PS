@@ -55,9 +55,7 @@ public class Main {
 				break;
 			}
 			cnt++;
-
 		}
-		
 	}
 	
 	static void bfs(int x, int y) {
@@ -88,10 +86,9 @@ public class Main {
 				q.offer(new Point(nx,ny));
 				visited[nx][ny] = true;
 				res += graph[nx][ny];
-				
+		
 			}
 		}
-		
 	}
 	
 	static boolean check(int x, int y) {
@@ -106,5 +103,4 @@ public class Main {
 			this.y = y;
 		}
 	}
-	
 }

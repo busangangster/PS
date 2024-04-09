@@ -46,8 +46,8 @@ public class Solution {
     }
 
     static void move() {
-        // int arrSize = arr.size();
-        for (int i=0; i<arr.size(); i++) {
+        int arrSize = arr.size();
+        for (int i=0; i<arrSize; i++) {
             micro cur = arr.get(i);
             cur.x = cur.x + dx[cur.d];
             cur.y = cur.y + dy[cur.d];
@@ -57,15 +57,14 @@ public class Solution {
                 cur.m = cur.m/2;
                 if (cur.m == 0) {
                     arr.remove(i);
-                    i--;
                     
                 }
 
             }
         }
+
         Collections.sort(arr);
 
-        // arrSize = arr.size();
         for (int i=0; i<arr.size()-1; i++) {
             micro tmp = arr.get(i);
             for (int j = i+1; j<arr.size(); j++) {
@@ -74,7 +73,7 @@ public class Solution {
                 if (tmp.x == next.x && tmp.y == next.y) {
                     tmp.m += next.m;
                     arr.remove(j);
-                    j--;
+                    j--; // 리스트에서 값이 제거될 때, 인덱스도 하나씩 감소시켜주기 !! 기억 !! 
                 }
             }
         }

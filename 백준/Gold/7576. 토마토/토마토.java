@@ -4,7 +4,6 @@ import java.util.*;
 class Main {
 	static int N, M;
 	static int[][] graph;
-	static boolean[][] visited;
 	static ArrayList<Node> tomato;
 	static int[] dx = { 1, 0, -1, 0 };
 	static int[] dy = { 0, 1, 0, -1 };
@@ -41,10 +40,8 @@ class Main {
 	static int bfs() {
 		Queue<Node> q = new ArrayDeque<>();
 		int tmp = 0;
-		visited = new boolean[N][M];
 		for (Node val : tomato) {
 			q.offer(new Node(val.x, val.y, val.time));
-			visited[val.x][val.y] = true;
 		}
 
 		while (!q.isEmpty()) {
@@ -57,15 +54,11 @@ class Main {
 
 				if (!check(nx, ny))
 					continue;
-				if (visited[nx][ny])
-					continue;
 				if (graph[nx][ny] != 0)
 					continue;
 
 				graph[nx][ny] = cur.time + 1;
 				q.offer(new Node(nx, ny, cur.time + 1));
-				visited[nx][ny] = true;
-
 			}
 		}
 		return tmp;

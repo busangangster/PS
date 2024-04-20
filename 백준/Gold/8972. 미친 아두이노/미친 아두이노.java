@@ -1,13 +1,14 @@
 import java.io.*;
 import java.util.*;
- 
+
 class Main {
-	static int R,C,start_x,start_y,jong_x,jong_y;
+	static int R, C, start_x, start_y, jong_x, jong_y;
 	static char[][] graph;
 	static int[][] countCheck;
 	static ArrayList<Node> arr;
-	static int[] dx = {0,1,1,1,0,0,0,-1,-1,-1};
-	static int[] dy = {0,-1,0,1,-1,0,1,-1,0,1};
+	static int[] dx = { 0, 1, 1, 1, 0, 0, 0, -1, -1, -1 };
+	static int[] dy = { 0, -1, 0, 1, -1, 0, 1, -1, 0, 1 };
+
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
@@ -20,12 +21,12 @@ class Main {
 		graph = new char[R][C];
 		arr = new ArrayList<>();
 
-		for (int i=0; i<R; i++) {
+		for (int i = 0; i < R; i++) {
 			String s = br.readLine();
-			for (int j=0; j<C; j++) {
+			for (int j = 0; j < C; j++) {
 				graph[i][j] = s.charAt(j);
 				if (graph[i][j] == 'R') {
-					arr.add(new Node(i,j));
+					arr.add(new Node(i, j));
 				}
 				if (graph[i][j] == 'I') {
 					start_x = i;
@@ -36,18 +37,17 @@ class Main {
 		boolean flag = true;
 		int cnt = 0;
 		String s = br.readLine();
-		for (int i=0; i<s.length(); i++) {
+		for (int i = 0; i < s.length(); i++) {
 			int cmd = s.charAt(i) - '0';
-			if(!solve(cmd)) {
+			if (!solve(cmd)) {
 				flag = false;
-				cnt = i+1;
+				cnt = i + 1;
 				break;
 			}
 		}
 		if (!flag) {
-			System.out.println("kraj" +" " +cnt);
-		}
-		else {
+			System.out.println("kraj" + " " + cnt);
+		} else {
 			for (char[] x : graph) {
 				for (char val : x) {
 					sb.append(val);
@@ -56,7 +56,7 @@ class Main {
 			}
 			System.out.println(sb);
 		}
-		
+
 	}
 
 	static boolean solve(int d) {
@@ -70,29 +70,30 @@ class Main {
 		graph[start_x][start_y] = '.';
 		graph[jong_x][jong_y] = 'I';
 
-
-		if(!robotMove(jong_x, jong_y)) return false;
+		if (!robotMove(jong_x, jong_y))
+			return false;
 
 		start_x = jong_x;
 		start_y = jong_y;
 		return true;
-		
+
 	}
 
 	static boolean robotMove(int x, int y) {
 		countCheck = new int[R][C];
 		ArrayList<Node> toWhere = new ArrayList<>();
-		for (int i=0; i<arr.size(); i++) {
+		for (int i = 0; i < arr.size(); i++) {
 			int tmp_x = 0;
 			int tmp_y = 0;
 			int min_v = Integer.MAX_VALUE;
-			for (int j=1; j<10; j++) {
+			for (int j = 1; j < 10; j++) {
 				int nx = arr.get(i).x + dx[j];
 				int ny = arr.get(i).y + dy[j];
 
-				if (!check(nx,ny)) continue;
+				if (!check(nx, ny))
+					continue;
 
-				int dis = Math.abs(x-nx) + Math.abs(y - ny);
+				int dis = Math.abs(x - nx) + Math.abs(y - ny);
 
 				if (dis < min_v) {
 					min_v = dis;
@@ -101,22 +102,20 @@ class Main {
 				}
 			}
 			graph[arr.get(i).x][arr.get(i).y] = '.';
-			toWhere.add(new Node(tmp_x,tmp_y));
-			countCheck[tmp_x][tmp_y]+=1;
+			toWhere.add(new Node(tmp_x, tmp_y));
+			countCheck[tmp_x][tmp_y] += 1;
 		}
 		arr.clear();
 
-		for (int i=0; i<toWhere.size(); i++) {
-			if (graph[toWhere.get(i).x][toWhere.get(i).y] == 'I') return false;
-		}
+		for (int i = 0; i < toWhere.size(); i++) {
+			if (graph[toWhere.get(i).x][toWhere.get(i).y] == 'I')
+				return false;
 
-		for (int i=0; i<toWhere.size(); i++) {
 			if (countCheck[toWhere.get(i).x][toWhere.get(i).y] > 1) {
 				continue;
-			}
-			else {
+			} else {
 				graph[toWhere.get(i).x][toWhere.get(i).y] = 'R';
-				arr.add(new Node(toWhere.get(i).x,toWhere.get(i).y));
+				arr.add(new Node(toWhere.get(i).x, toWhere.get(i).y));
 			}
 		}
 
@@ -125,15 +124,18 @@ class Main {
 	}
 
 	static boolean check(int x, int y) {
-		if (0 <= x && x < R && 0 <= y && y < C) return true;
-		else return false;
+		if (0 <= x && x < R && 0 <= y && y < C)
+			return true;
+		else
+			return false;
 	}
 
-	static class Node{
-		int x,y;
+	static class Node {
+		int x, y;
+
 		public Node(int x, int y) {
 			this.x = x;
 			this.y = y;
-		}	
+		}
 	}
 }

@@ -90,9 +90,6 @@ class Main {
 				int nx = arr.get(i).x + dx[j];
 				int ny = arr.get(i).y + dy[j];
 
-				if (!check(nx, ny))
-					continue;
-
 				int dis = Math.abs(x - nx) + Math.abs(y - ny);
 
 				if (dis < min_v) {
@@ -121,13 +118,6 @@ class Main {
 
 		return true;
 
-	}
-
-	static boolean check(int x, int y) {
-		if (0 <= x && x < R && 0 <= y && y < C)
-			return true;
-		else
-			return false;
 	}
 
 	static class Node {

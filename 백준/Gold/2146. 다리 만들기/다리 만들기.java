@@ -6,13 +6,11 @@ class Main {
 	static int[][] graph;
 	static boolean[][] visited;
 	static boolean[][] checked;
-
 	static int[] dx = {0,1,0,-1};
 	static int[] dy = {1,0,-1,0};
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
 
 		N = Integer.parseInt(br.readLine());
 
@@ -37,9 +35,7 @@ class Main {
 				}
 			}
 		}
-		// for (int[] x: graph) {
-		// 	System.out.println(Arrays.toString(x));
-		// }
+
 		for (int i=0; i<N; i++) {
 			for (int j=0; j<N; j++) {
 				if (graph[i][j] != 0) {
@@ -58,6 +54,10 @@ class Main {
 
 		while (!q.isEmpty()){
 			Node cur = q.poll();
+
+			if (cur.cnt > min_v) {
+				continue;
+			}
 
 			if (graph[cur.x][cur.y] != 0 && graph[cur.x][cur.y] != graph[x][y]) {
 				min_v = Math.min(cur.cnt-1,min_v);
@@ -101,7 +101,6 @@ class Main {
 				}
 			}
 		}
-
 	}
 
 	static boolean check(int x, int y){

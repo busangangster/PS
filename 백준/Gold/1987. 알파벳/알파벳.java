@@ -1,52 +1,63 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.StringTokenizer;
 
-public class Main {
-	static int N,M;
-	static char[][] arr;
-	static HashSet<Character> alpha = new HashSet<Character>();
+class Main {
+	static int R,C,max_v;
+	static char[][] graph;
+
 	static int[] dx = {0,1,0,-1};
 	static int[] dy = {1,0,-1,0};
-	static int ans;
-	
+	static HashSet<Character> ans = new HashSet<>();
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		arr = new char[N][M];
-		ans = 0;
-		
-		for (int i=0; i<N; i++) {
+		StringTokenizer st;
+
+		st = new StringTokenizer(br.readLine());
+
+		R = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken()); 
+
+		graph = new char[R][C];
+		max_v = Integer.MIN_VALUE;
+
+		for (int i=0; i<R; i++) {
 			String s = br.readLine();
-			for (int j=0; j<M; j++) {
-				arr[i][j] = s.charAt(j);
+			for (int j=0; j<C; j++) {
+				graph[i][j] = s.charAt(j);
 			}
 		}
-		
-		alpha.add(arr[0][0]);
-		DFS(0,0,1);
-		System.out.println(ans);
-		
+		ans.add(graph[0][0]);
+
+		dfs(0,0,1);
+		System.out.println(max_v);
+
 	}
-	
-	public static void DFS(int x,int y,int cnt) {
-		ans = Math.max(ans, cnt);
-		
+
+	static void dfs(int x, int y, int cnt) {
+
+		max_v = Math.max(cnt,max_v);
+
 		for (int i=0; i<4; i++) {
 			int nx = x + dx[i];
 			int ny = y + dy[i];
 
-			
-			if (0 <= nx && nx < N && 0 <= ny && ny < M) {
-				if (!alpha.contains(arr[nx][ny])) {
-					
-					alpha.add(arr[nx][ny]);
-					DFS(nx,ny,cnt+1);
-					alpha.remove(arr[nx][ny]);
-				}
+			if (!check(nx,ny)) continue;
+
+			if (!ans.contains(graph[nx][ny])) {
+
+				ans.add(graph[nx][ny]);
+				dfs(nx,ny,cnt+1);
+				ans.remove(graph[nx][ny]);
+
 			}
 		}
 	}
+
+	static boolean check(int x, int y) {
+		if (0 <= x && x < R && 0 <= y && y < C) return true;
+		else return false;
+	}
+
 }

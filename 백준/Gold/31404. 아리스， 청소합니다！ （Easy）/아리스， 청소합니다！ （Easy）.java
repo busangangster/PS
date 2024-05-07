@@ -4,7 +4,7 @@ import java.util.*;
 public class Main {
 	static int N,M,aris_x,aris_y,direction,cnt, limit;
 	static int[][] graph,ruleA,ruleB;
-	static int[] dx = {-1,0,1,0}; // 북동남서
+	static int[] dx = {-1,0,1,0}; 
 	static int[] dy = {0,1,0,-1};
 	
 	public static void main(String[] args) throws Exception {
@@ -31,11 +31,6 @@ public class Main {
 				graph[i][j] = 1;
 			}
 		}
-//		for (int[] x: graph) {
-//			System.out.println(Arrays.toString(x));
-//		}
-//		System.out.println("-------------");
-		
 		
 		for (int i=0; i<N; i++) {
 			String s = br.readLine();
@@ -77,8 +72,8 @@ public class Main {
 				break;
 			}
 			
-			if (limit >= 1000000) {
-				System.out.println(cnt-1000000);
+			if (limit >= 100000) {
+				System.out.println(cnt-100000);
 				break;
 			}
 					

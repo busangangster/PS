@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 14500 KB, 시간: 292 ms
+메모리: 14336 KB, 시간: 292 ms
 
 ### 분류
 
@@ -12,11 +12,11 @@
 
 ### 제출 일자
 
-2024년 5월 7일 10:25:32
+2024년 5월 7일 11:09:47
 
 ### 문제 설명
 
-<p style="text-align: right;"><img alt="" src="https://upload.acmicpc.net/bb1b1790-a790-4ec9-b566-07b4af5e3bcf/-/preview/" style="float: right; width: 160px; margin-left: 16px; margin-right: 16px;"><em>뽜밤뽜밤-! 아리스는 메이드 용사로 전직했습니다!</em></p>
+<p style="text-align: right;"><img alt="" src="" style="float: right; width: 160px; margin-left: 16px; margin-right: 16px;"><em>뽜밤뽜밤-! 아리스는 메이드 용사로 전직했습니다!</em></p>
 
 <p>밀레니엄 사이언스 스쿨 엔지니어부의 히비키는 튜링 머신과 비슷한 원리로 작동하는 로봇 청소기를 발명했습니다.</p>
 

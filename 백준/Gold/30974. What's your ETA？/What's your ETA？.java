@@ -19,7 +19,7 @@ class Main {
 	  arr = new ArrayList<ArrayList<Node>>();
 	  code = new int[N+1];
 	  numbers = new boolean[10000001];
-	  INF = 1000000L*400000L+1;
+	  INF = 1000000L*400000L+1;  // long형에 넣을 때는 L 붙여서 int을 long형으로 만들어줘야 함 !!! 
 
 	  for (int i=0; i<=N; i++) {
 		arr.add(new ArrayList<>());

@@ -50,8 +50,6 @@ class Main {
 
 			boolean currentFlag =  rockSide(cur.x, cur.y);
 
-			// if (min_dis[cur.x][cur.y] < cur.time) continue;
-
 			for (int i=0; i<4; i++) {
 				int nx = cur.x + dx[i]; 
 				int ny = cur.y + dy[i];

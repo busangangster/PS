@@ -4,7 +4,7 @@ import java.util.*;
 public class Main {
 	static int R, C, cur_x, cur_y;
 	static char[][] graph;
-	static boolean[][] visited, ans;
+	static boolean[][] visited;
 	static ArrayList<Character> commands;
 	static int[] dx = { -1, 1, 0, 0 }; // 상,하,좌,우
 	static int[] dy = { 0, 0, -1, 1 };
@@ -22,7 +22,6 @@ public class Main {
 		graph = new char[R][C];
 		commands = new ArrayList<>();
 		visited = new boolean[R][C];
-		ans = new boolean[R][C];
 
 		for (int i = 0; i < R; i++) {
 			String s = br.readLine();
@@ -52,22 +51,24 @@ public class Main {
 				move(commands.get(cnt));
 			}
 			cnt++;
-
 		}
 
 		// 최종 위치에서 주변 밝히기
-		ans[cur_x][cur_y] = true;
+		graph[cur_x][cur_y] = '.';
 		for (int i = 0; i < 4; i++) {
 			int nx = cur_x + dx[i];
 			int ny = cur_y + dy[i];
 			if (!check(nx, ny))
 				continue;
-			ans[nx][ny] = true;
+			
+			if (graph[nx][ny] != graph[cur_x][cur_y]) {
+				graph[nx][ny] = '.';
+			}
 		}
 
 		for (int i = 0; i < R; i++) {
 			for (int j = 0; j < C; j++) {
-				if (ans[i][j]) {
+				if (graph[i][j] == '.') {
 					sb.append('.');
 				} else {
 					sb.append('#');
@@ -75,7 +76,7 @@ public class Main {
 			}
 			sb.append("\n");
 		}
-
+		
 		System.out.println(sb);
 
 	}
@@ -109,7 +110,7 @@ public class Main {
 		q.offer(new Node(cur_x, cur_y));
 
 		char alpha = graph[cur_x][cur_y];
-		ans[cur_x][cur_y] = true;
+		graph[cur_x][cur_y] = '.';
 
 		while (!q.isEmpty()) {
 			Node cur = q.poll();
@@ -125,7 +126,7 @@ public class Main {
 
 				if (alpha == graph[nx][ny]) {
 					visited[nx][ny] = true;
-					ans[nx][ny] = true;
+					graph[nx][ny] = '.';
 					q.offer(new Node(nx, ny));
 				}
 			}

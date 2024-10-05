@@ -32,17 +32,12 @@ public class Main {
         E = Integer.parseInt(st.nextToken());
 
         dijkstra(S);
-
-        // System.out.println(Arrays.toString(min_dis));
         System.out.println(min_dis[E]);
-
     }
     
     public static void dijkstra(int start) {
         min_dis = new int[N + 1];
-        for (int i = 0; i < N + 1; i++) {
-            min_dis[i] = INF;
-        }
+        Arrays.fill(min_dis, INF);
 
         PriorityQueue<Node> pq = new PriorityQueue<Node>((o1, o2) -> o1.cost - o2.cost);
         min_dis[start] = 0;
@@ -63,7 +58,6 @@ public class Main {
                 }
             }
         }
-
     }
 }
 

@@ -9,10 +9,10 @@ public class Main {
 
     int n = Integer.parseInt(br.readLine());
 
-    int[] ans = new int[n];
+    int[] stack = new int[n];
     int[] arr = new int[n];
+    int[] ans = new int[n];
     Arrays.fill(ans, -1);
-    Stack<Integer> stack = new Stack<>();
 
     st = new StringTokenizer(br.readLine());
 
@@ -20,19 +20,13 @@ public class Main {
       arr[i] = Integer.parseInt(st.nextToken());
     }
 
+    int top = 0;
     for (int i = 0; i < n; i++) {
-      if (stack.isEmpty()) {
-        stack.push(i);
-      } else {
-        if (arr[stack.peek()] < arr[i]) {
-          while (!stack.isEmpty() && arr[stack.peek()] < arr[i]) {
-            ans[stack.peek()] = arr[i];
-            stack.pop();
-          }
-        }
-        stack.push(i);
-
+      while (top > 0 && arr[stack[top - 1]] < arr[i]) {
+        ans[stack[--top]] = arr[i];
       }
+
+      stack[top++] = i;
     }
     for (int i = 0; i < n; i++) {
       sb.append(ans[i]).append(" ");

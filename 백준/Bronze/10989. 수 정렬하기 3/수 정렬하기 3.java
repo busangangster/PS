@@ -8,18 +8,18 @@ public class Main {
 
     int n = Integer.parseInt(br.readLine());
 
-    int[] arr = new int[n];
-    for (int i = 0; i < n; i++) {
-      arr[i] = Integer.parseInt(br.readLine());
-    }
-
-    Arrays.sort(arr);
+    int[] count = new int[10001];
 
     for (int i = 0; i < n; i++) {
-      sb.append(arr[i]).append("\n");
+      count[Integer.parseInt(br.readLine())]++;
     }
 
+    for (int i = 1; i <= 10000; i++) {
+      int c = count[i];
+      while (c-- > 0) {
+        sb.append(i).append("\n");
+      }
+    }
     System.out.println(sb);
-
   }
 }

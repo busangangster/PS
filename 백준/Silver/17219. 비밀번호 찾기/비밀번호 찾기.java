@@ -1,28 +1,27 @@
-import java.io.*;
 import java.util.*;
-public class Main {
+import java.io.*;
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
-		
-		HashMap<String,String> hm = new HashMap<>();
-		st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
-		
-		
-		for (int i=0; i<N; i++) {
-			st = new StringTokenizer(br.readLine());
-			String address = st.nextToken();
-			String pass = st.nextToken();
-			hm.put(address, pass);
-		}
-		for (int i=0; i<M; i++) {
-			String s = br.readLine();
-			sb.append(hm.get(s)).append("\n");
-		}
-		System.out.println(sb);
-	}
+public class Main {
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st;
+    StringBuilder sb = new StringBuilder();
+
+    st = new StringTokenizer(br.readLine());
+    int n = Integer.parseInt(st.nextToken());
+    int m = Integer.parseInt(st.nextToken());
+
+    HashMap<String, String> hm = new HashMap<>();
+    for (int i = 0; i < n; i++) {
+      st = new StringTokenizer(br.readLine());
+      hm.put(st.nextToken(), st.nextToken());
+    }
+
+    for (int i = 0; i < m; i++) {
+      String s = br.readLine();
+      sb.append(hm.get(s)).append("\n");
+    }
+
+    System.out.println(sb);
+  }
 }

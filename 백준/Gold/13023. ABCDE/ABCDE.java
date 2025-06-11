@@ -32,15 +32,14 @@ public class Main {
       visited = new boolean[n];
       visited[i] = true;
       dfs(1, i);
-      if (ans == 1)
-        break;
     }
 
     System.out.println(ans);
-
   }
 
   public static void dfs(int depth, int idx) {
+    if (ans == 1)
+      return;
     if (depth == 5) {
       ans = 1;
       return;

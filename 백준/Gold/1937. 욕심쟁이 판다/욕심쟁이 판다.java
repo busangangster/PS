@@ -1,63 +1,56 @@
-import java.io.*;
 import java.util.*;
- 
-class Main {
-	static int N,max_v;
-	static int[][] graph,dp;
-	static boolean[][] visited;
+import java.io.*;
 
-	static int[] dx = {0,1,0,-1};
-	static int[] dy = {1,0,-1,0};
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		
-		N = Integer.parseInt(br.readLine());
+public class Main {
+  public static int n;
+  public static int[][] arr, dp;
+  public static int[] dx = { 0, 1, 0, -1 };
+  public static int[] dy = { 1, 0, -1, 0 };
 
-		graph = new int[N][N];
-		dp = new int[N][N];
-		max_v = Integer.MIN_VALUE;
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st;
 
-		for (int i=0; i<N; i++) {
-			st = new StringTokenizer(br.readLine());
-			for (int j=0; j<N; j++) {
-				graph[i][j] = Integer.parseInt(st.nextToken());
-			}
-		} 
+    n = Integer.parseInt(br.readLine());
+    int ans = Integer.MIN_VALUE;
 
-		for (int i=0; i<N; i++) {
-			for (int j=0; j<N; j++) {
-				max_v = Math.max(dfs(i,j),max_v);
-			}
-		}
-		System.out.println(max_v);
-	}
+    arr = new int[n][n];
+    dp = new int[n][n];
 
-	static int dfs(int x, int y) {
+    for (int i = 0; i < n; i++) {
+      st = new StringTokenizer(br.readLine());
+      for (int j = 0; j < n; j++) {
+        arr[i][j] = Integer.parseInt(st.nextToken());
+      }
+    }
 
-		if (dp[x][y] != 0) {
-			return dp[x][y];
-		}
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        ans = Math.max(ans, dfs(i, j));
+      }
+    }
 
-		dp[x][y] = 1;
+    System.out.println(ans);
+  }
 
-		for (int i=0; i<4; i++) {
-			int nx = x + dx[i];
-			int ny = y + dy[i];
+  public static int dfs(int x, int y) {
+    if (dp[x][y] != 0)
+      return dp[x][y];
 
-			if (!check(nx, ny)) continue;
-			if (graph[x][y] >= graph[nx][ny])  continue;
+    dp[x][y] = 1;
+    for (int i = 0; i < 4; i++) {
+      int nx = x + dx[i];
+      int ny = y + dy[i];
 
-			dp[x][y] = Math.max(dp[x][y], dfs(nx,ny)+1);
-			dfs(nx,ny);
-		}	
+      if (check(nx, ny) && arr[x][y] < arr[nx][ny]) {
+        dp[x][y] = Math.max(dp[x][y], dfs(nx, ny) + 1);
+      }
 
-		return dp[x][y];
-	}
+    }
+    return dp[x][y];
+  }
 
-	static boolean check(int x, int y) {
-		if (0 <= x && x < N && 0 <= y && y < N) return true;
-		else return false;
-	}
-
+  public static boolean check(int x, int y) {
+    return (0 <= x && x < n && 0 <= y && y < n);
+  }
 }

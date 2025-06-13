@@ -1,42 +1,53 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
+  public static int n, target;
+  public static int[] arr;
 
-	static int n;
-	static long[] arr;
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		n = Integer.parseInt(br.readLine());
-		
-		arr = new long[n];
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		for(int i=0; i<n; i++) {
-			arr[i] = Long.parseLong(st.nextToken());
-		}
-		
-		long min = Long.MAX_VALUE;
-		int ml =0, mr = 0;
-		for(int i=0; i<n-1; i++) {
-			int left =i+1;
-			int right =n-1;
-			while(left<=right) {
-				int mid = (left+right)/2;
-				long sum = Math.abs(arr[i]+arr[mid]);
-				
-				if(min > sum) {
-					min = sum;
-					ml = i; mr = mid;
-				}
-				if(arr[mid]>= -arr[i]) {
-					right = mid-1;
-				}else{
-					left = mid+1;
-				}
-			}
-		}
-		System.out.println(arr[ml]+" "+arr[mr]);
-	}
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st;
+
+    n = Integer.parseInt(br.readLine());
+
+    arr = new int[n];
+    target = Integer.MAX_VALUE;
+
+    st = new StringTokenizer(br.readLine());
+    for (int i = 0; i < n; i++) {
+      arr[i] = Integer.parseInt(st.nextToken());
+    }
+
+    int[] res = bs();
+    System.out.println(res[0] + " " + res[1]);
+
+  }
+
+  public static int[] bs() {
+    int lt = 0;
+    int rt = n - 1;
+    int[] ans = new int[2];
+
+    while (lt < rt) {
+      int mid = arr[lt] + arr[rt];
+      int tmp = Math.abs(mid);
+
+      if (tmp < target) {
+        ans[0] = arr[lt];
+        ans[1] = arr[rt];
+        target = tmp;
+      }
+
+      if (mid < 0) {
+        lt++;
+      } else if (mid > 0) {
+        rt--;
+      } else {
+        break;
+      }
+    }
+      
+    return ans;
+  }
 }

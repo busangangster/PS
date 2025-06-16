@@ -1,38 +1,37 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
-class Main {
+public class Main {
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        
-        int n = Integer.parseInt(br.readLine());
-        
-        Stack<Integer> stack = new Stack<>();
-        
-        int cnt = 1;
-        for (int i=0; i<n; i++) {
-        	int num = Integer.parseInt(br.readLine());
-        	
-        	while (cnt <= num) {
-        		stack.push(cnt);
-        		cnt++;
-        		sb.append("+").append("\n");
-        	}
-    		
-    		if (stack.peek() == num) {
-    			stack.pop();
-    			sb.append("-").append("\n");
-    		}	
-        }
+    int n = Integer.parseInt(br.readLine());
 
-        if (!stack.isEmpty()) {
-        	System.out.println("NO");
-        }
-        else {
-        	System.out.println(sb);	
-        }
-        
-	}
+    int[] arr = new int[n];
+    Stack<Integer> stack = new Stack<>();
+
+    for (int i = 0; i < n; i++) {
+      arr[i] = Integer.parseInt(br.readLine());
+    }
+
+    int pos = 0;
+
+    for (int i = 1; i <= n; i++) {
+      stack.push(i);
+      sb.append("+").append("\n");
+      while (!stack.isEmpty() && stack.peek() == arr[pos]) {
+        stack.pop();
+        sb.append("-").append("\n");
+        pos++;
+      }
+    }
+
+    if (stack.isEmpty()) {
+      System.out.println(sb);
+    } else {
+      System.out.println("NO");
+    }
+
+  }
 }

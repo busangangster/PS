@@ -2,9 +2,8 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-  public static int N, M, distance;
-  public static boolean[] visited;
-  public static ArrayList<Integer> nodes;
+  public static int N, M;
+  public static int[] dis;
   public static ArrayList<ArrayList<Integer>> arr = new ArrayList<ArrayList<Integer>>();
 
   public static void main(String[] args) throws Exception {
@@ -15,7 +14,8 @@ public class Main {
     N = Integer.parseInt(st.nextToken());
     M = Integer.parseInt(st.nextToken());
 
-    visited = new boolean[N + 1];
+    dis = new int[N + 1];
+    Arrays.fill(dis, -1);
     for (int i = 0; i <= N; i++) {
       arr.add(new ArrayList<>());
     }
@@ -29,44 +29,41 @@ public class Main {
     }
 
     bfs();
-    Collections.sort(nodes);
-    System.out.println(nodes.get(0) + " " + distance + " " + nodes.size());
 
+    int max_dis = Integer.MIN_VALUE;
+    int ans = 0;
+
+    for (int i = 1; i <= N; i++) {
+      if (max_dis < dis[i]) {
+        max_dis = dis[i];
+        ans = i;
+      }
+    }
+
+    int cnt = 0;
+    for (int i = 1; i <= N; i++) {
+      if (dis[i] == max_dis) {
+        cnt++;
+      }
+    }
+
+    System.out.println(ans + " " + max_dis + " " + cnt);
   }
 
   public static void bfs() {
-    Queue<Node> q = new ArrayDeque<Node>();
-    visited[1] = true;
-    distance = Integer.MIN_VALUE;
-    nodes = new ArrayList<>();
-    q.offer(new Node(1, 0));
+    Queue<Integer> q = new ArrayDeque<Integer>();
+    dis[1] = 0;
+    q.offer(1);
 
     while (!q.isEmpty()) {
-      Node cur = q.poll();
+      int cur = q.poll();
 
-      for (int next : arr.get(cur.node)) {
-        if (!visited[next]) {
-          if (distance < cur.dis + 1) {
-            nodes.clear();
-            distance = cur.dis + 1;
-            nodes.add(next);
-          } else if (distance == cur.dis + 1) {
-            nodes.add(next);
-          }
-          visited[next] = true;
-          q.offer(new Node(next, cur.dis + 1));
+      for (int next : arr.get(cur)) {
+        if (dis[next] == -1) {
+          dis[next] = dis[cur] + 1;
+          q.offer(next);
         }
       }
     }
-  }
-}
-
-class Node {
-  int node;
-  int dis;
-
-  public Node(int node, int dis) {
-    this.node = node;
-    this.dis = dis;
   }
 }

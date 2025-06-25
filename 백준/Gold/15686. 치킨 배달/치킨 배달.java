@@ -1,71 +1,73 @@
-import java.io.*;
 import java.util.*;
- 
-class Main {
-	static int N,M,ans;
-	static int[][] graph;
-	static ArrayList<Node> chickens;
-	static ArrayList<Node> homes;
-	static int[] running;
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		
-		st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
+import java.io.*;
 
-		graph = new int[N][N];
-		ans = Integer.MAX_VALUE;
-		chickens = new ArrayList<Node>();
-		homes = new ArrayList<Node>();
+public class Main {
+  public static int N, M, ans;
+  public static ArrayList<Node> chicken = new ArrayList<>();
+  public static ArrayList<Node> house = new ArrayList<>();
+  public static ArrayList<Node> selected = new ArrayList<>();
 
-		for (int i=0; i<N; i++) {
-			st = new StringTokenizer(br.readLine());
-			for (int j=0; j<N; j++) {
-				graph[i][j] = Integer.parseInt(st.nextToken());
-				if (graph[i][j] == 2) {
-					chickens.add(new Node(i,j));
-				}
-				else if (graph[i][j] == 1) {
-					homes.add(new Node(i,j));
-				}
-			}
-		}
-		running = new int[M];
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st;
 
-		comb(0,0);
-		System.out.println(ans);
-	}
+    st = new StringTokenizer(br.readLine());
+    N = Integer.parseInt(st.nextToken());
+    M = Integer.parseInt(st.nextToken());
 
-	static void comb(int cnt,int start) {
-		if (cnt == M) {
-			int dis = 0;
-			for (int i=0; i<homes.size(); i++) {
-				int res = Integer.MAX_VALUE;
-				for (int j: running) {
-					int tmp = Math.abs(homes.get(i).x - chickens.get(j).x) + Math.abs(homes.get(i).y - chickens.get(j).y);
-					res = Math.min(tmp,res);
-				}
-				dis += res;
-			}
+    for (int i = 0; i < N; i++) {
+      st = new StringTokenizer(br.readLine());
+      for (int j = 0; j < N; j++) {
+        int tmp = Integer.parseInt(st.nextToken());
+        if (tmp == 1) {
+          house.add(new Node(i, j));
+        } else if (tmp == 2) {
+          chicken.add(new Node(i, j));
+        }
+      }
+    }
 
-			ans = Math.min(ans,dis);
-			return;
-		}
+    ans = Integer.MAX_VALUE;
+    dfs(0, 0);
 
+    System.out.println(ans);
 
-		for (int i=start; i<chickens.size(); i++) {
-			running[cnt] = i;
-			comb(cnt+1,i+1);
-		}
+  }
 
-	}
-	static class Node{
-		int x,y;
-		public Node(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-	}
+  public static void dfs(int start, int cnt) {
+    if (cnt == M) {
+      int res = checkDistance();
+      ans = Math.min(ans, res);
+      return;
+    }
+
+    for (int i = start; i < chicken.size(); i++) {
+      selected.add(chicken.get(i));
+      dfs(i + 1, cnt + 1);
+      selected.remove(selected.size() - 1);
+    }
+  }
+
+  public static int checkDistance() {
+    int sum = 0;
+    for (Node h : house) {
+      int min_v = Integer.MAX_VALUE;
+      for (Node c : selected) {
+        int dis = Math.abs(c.x - h.x) + Math.abs(c.y - h.y);
+        min_v = Math.min(min_v, dis);
+      }
+      sum += min_v;
+    }
+    return sum;
+  }
+}
+
+class Node {
+  int x;
+  int y;
+
+  public Node(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
 }

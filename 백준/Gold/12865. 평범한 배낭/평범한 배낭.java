@@ -19,19 +19,16 @@ public class Main {
       items[i][1] = Integer.parseInt(st.nextToken());
     }
 
-    int ans = Integer.MIN_VALUE;
-
     for (int i = 1; i <= N; i++) {
       for (int j = 1; j <= K; j++) {
         dp[i][j] = dp[i - 1][j];
         if (j - items[i][0] >= 0) {
           dp[i][j] = Math.max(dp[i - 1][j - items[i][0]] + items[i][1], dp[i - 1][j]);
         }
-        ans = Math.max(ans, dp[i][j]);
       }
     }
 
-     System.out.println(ans);
+    System.out.println(dp[N][K]);
 
   }
 }

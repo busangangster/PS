@@ -5,7 +5,7 @@ public class Main {
   public static int L, C;
   public static char[] alpha;
   public static char[] selected;
-  public static ArrayList<Character> vowel = new ArrayList<Character>();
+  public static boolean[] vowel = new boolean[26];
   public static StringBuilder sb = new StringBuilder();
 
   public static void main(String[] args) throws Exception {
@@ -18,11 +18,11 @@ public class Main {
 
     alpha = new char[C];
     selected = new char[L];
-    vowel.add('a');
-    vowel.add('e');
-    vowel.add('i');
-    vowel.add('o');
-    vowel.add('u');
+    vowel['a' - 'a'] = true;
+    vowel['e' - 'a'] = true;
+    vowel['i' - 'a'] = true;
+    vowel['o' - 'a'] = true;
+    vowel['u' - 'a'] = true;
 
     st = new StringTokenizer(br.readLine());
     for (int i = 0; i < C; i++) {
@@ -42,11 +42,10 @@ public class Main {
       String s = "";
       for (int i = 0; i < L; i++) {
         char tmp = selected[i];
-        if (vowel.contains(tmp)) {
+        if (vowel[tmp - 'a'])
           v++;
-        } else {
+        else
           c++;
-        }
         s += tmp;
       }
       if (v >= 1 && c >= 2)

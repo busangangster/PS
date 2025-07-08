@@ -1,121 +1,93 @@
 import java.util.*;
 import java.io.*;
 
-class Main {
-	static int N;
-	static char[][] graph;
-	static char[][] newMap;
-	static ArrayList<Node> teachers;
-	static ArrayList<Node> canInstall;
-	static int[] selected;
-	static int[] dx = {0,1,0,-1};
-	static int[] dy = {1,0,-1,0};
-	static boolean flag = false;
-	public static void main(String[] args) throws Exception {
-	  BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	  StringTokenizer st;
+public class Main {
+  public static int N;
+  public static boolean ans;
+  public static char[][] arr;
+  public static int[] dx = { 0, 1, 0, -1 };
+  public static int[] dy = { 1, 0, -1, 0 };
+  public static ArrayList<Node> teachers = new ArrayList<Node>();
 
-	  N = Integer.parseInt(br.readLine());
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st;
 
-	  graph = new char[N][N];
-	  teachers = new ArrayList<>();
-	  canInstall = new ArrayList<>();
-	  selected = new int[3];
-	  newMap = new char[N][N];
-	
-	  for (int i=0; i<N; i++) {
-		st = new StringTokenizer(br.readLine());
-		for (int j=0; j<N; j++) {
-			graph[i][j] = st.nextToken().charAt(0);
-			if  (graph[i][j] == 'T') {
-				teachers.add(new Node(i,j));
-			}
-			if (graph[i][j] == 'X') {
-				canInstall.add(new Node(i,j));
-			}
-			newMap[i][j] = graph[i][j];
-		}
-	  }
+    N = Integer.parseInt(br.readLine());
+    arr = new char[N][N];
 
+    for (int i = 0; i < N; i++) {
+      st = new StringTokenizer(br.readLine());
+      for (int j = 0; j < N; j++) {
+        char tmp = st.nextToken().charAt(0);
+        if (tmp == 'T') {
+          teachers.add(new Node(i, j));
+        }
+        arr[i][j] = tmp;
+      }
+    }
+    ans = false;
+    dfs(0);
+    System.out.println(ans ? "YES" : "NO");
 
-	obstacle(0, 0);
-	System.out.println(flag ? "YES" : "NO");
-	}
+  }
 
-	static void renew() {
-		for (int i=0; i<N; i++) {
-			for (int j=0; j<N; j++) {
-				graph[i][j] = newMap[i][j];
-			}
-		}
-	}
+  public static void dfs(int cnt) {
+    if (cnt == 3) {
+      if (move()) {
+        ans = true;
+      }
+      return;
+    }
 
-	static void obstacle(int start, int cnt) { // 장애물 설치할 위치 조합으로 찾기
-		if (cnt == 3) {
-			buildObstcle();
+    if (ans)
+      return;
 
-			int tmp = solve(selected);
-			if (tmp == 1) {
-				flag = true;
-				return;
-			}
-			renew();
-			return;
-		}
+    for (int i = 0; i < N; i++) {
+      for (int j = 0; j < N; j++) {
+        if (arr[i][j] == 'X') {
+          arr[i][j] = 'O';
+          dfs(cnt + 1);
+          arr[i][j] = 'X';
+        }
+      }
+    }
+  }
 
-		for (int i=start; i<canInstall.size(); i++) {
-			selected[cnt] = i;
-			obstacle(i+1, cnt+1);
-		}
-	}
+  public static boolean move() {
+    for (Node cur : teachers) {
+      for (int i = 0; i < 4; i++) {
+        int nx = cur.x + dx[i];
+        int ny = cur.y + dy[i];
+        while (true) {
+          if (!check(nx, ny))
+            break;
 
-	static void buildObstcle() { // 장애물 만들 수 있는 곳에 장애물 설치하기
-		for (int i=0; i<3; i++) {
-			Node now = canInstall.get(selected[i]);
-			graph[now.x][now.y] = 'O';
-		}
-	}
+          if (arr[nx][ny] == 'O')
+            break;
 
-	static int solve(int[] ob) { // 감시 피할 수 있는지 확인 
+          if (arr[nx][ny] == 'S')
+            return false;
 
-		for (int t=0; t<teachers.size(); t++) {
-			Node cur = teachers.get(t);
+          nx = nx + dx[i];
+          ny = ny + dy[i];
+        }
+      }
+    }
+    return true;
+  }
 
-			for (int i = 0; i<4; i++) {
-				int tmpx = cur.x;
-				int tmpy = cur.y;
-				while (true) {
-					int nx = tmpx + dx[i];
-					int ny = tmpy + dy[i];
+  public static boolean check(int x, int y) {
+    return (0 <= x && x < N && 0 <= y && y < N);
+  }
+}
 
-					if (!check(nx, ny)) break;
-					if (graph[nx][ny] == 'O') break;
-					if (graph[nx][ny] == 'T') break;
+class Node {
+  int x;
+  int y;
 
-					if (graph[nx][ny] == 'S') {
-						return -1;
-					}
-
-					tmpx = nx;
-					tmpy = ny;
-				}
-
-			}
-		}
-		return 1;
-	}
-
-	static boolean check(int x,int y) {
-		if (0 <= x && x < N && 0 <= y && y < N) return true;
-		else return false;
-	}
-
-	static class Node{
-		int x,y;
-		public Node(int x, int y) {
-			this.x = x;
-			this.y =y ;
-		}
-		
-	}
+  public Node(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
 }

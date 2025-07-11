@@ -23,7 +23,8 @@ public class Main {
       }
     }
 
-    subset(0);
+    selected[0] = true;
+    subset(1);
     System.out.println(ans);
   }
 

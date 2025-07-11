@@ -5,8 +5,6 @@ public class Main {
   public static int N, ans;
   public static int[][] arr;
   public static boolean[] selected;
-  public static ArrayList<Integer> firstTeam;
-  public static ArrayList<Integer> secondTeam;
 
   public static void main(String[] args) throws Exception {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -33,19 +31,19 @@ public class Main {
     int firstTeamScore = 0;
     int secondTeamScore = 0;
 
-    for (int i = 0; i < firstTeam.size(); i++) {
-      for (int j = 0; j < firstTeam.size(); j++) {
+    for (int i = 0; i < N; i++) {
+      for (int j = 0; j < N; j++) {
         if (i == j)
           continue;
-        firstTeamScore += arr[firstTeam.get(i)][firstTeam.get(j)];
-      }
-    }
-
-    for (int i = 0; i < secondTeam.size(); i++) {
-      for (int j = 0; j < secondTeam.size(); j++) {
-        if (i == j)
-          continue;
-        secondTeamScore += arr[secondTeam.get(i)][secondTeam.get(j)];
+        if (selected[i]) {
+          if (selected[j]) {
+            firstTeamScore += arr[i][j];
+          }
+        } else {
+          if (!selected[j]) {
+            secondTeamScore += arr[i][j];
+          }
+        }
       }
     }
 
@@ -56,19 +54,15 @@ public class Main {
   }
 
   public static void subset(int cnt) {
+
     if (cnt == N) {
-      firstTeam = new ArrayList<>();
-      secondTeam = new ArrayList<>();
-      for (int i = 0; i < N; i++) {
-        if (selected[i]) {
-          firstTeam.add(i);
-        } else {
-          secondTeam.add(i);
-        }
-      }
       int res = getScore();
       if (res != -1) {
         ans = Math.min(ans, res);
+        if (ans == 0) {
+          System.out.println(0);
+          System.exit(0);
+        }
       }
       return;
     }

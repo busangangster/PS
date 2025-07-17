@@ -1,113 +1,114 @@
 import java.util.*;
 import java.io.*;
 
-class Main {
-	static int N,M,start_x,start_y,end_x,end_y,INF;
-	static int[][] min_dis;
-	static char[][] graph;
-	static boolean[][] visited;
-	static int[] dx = {1,0,-1,0};
-	static int[] dy = {0,1,0,-1};
-	public static void main(String[] args) throws Exception {
-	  BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	  StringTokenizer st;
+public class Main {
+  public static int H, W, sx, sy, ex, ey;
+  public static char[][] arr;
+  public static int[][] nextWall;
+  public static int[][] min_dis;
+  public static int[] dx = { 0, 1, 0, -1 };
+  public static int[] dy = { 1, 0, -1, 0 };
 
-	  st = new StringTokenizer(br.readLine());
-	  N = Integer.parseInt(st.nextToken());
-	  M = Integer.parseInt(st.nextToken());
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st;
 
-	  graph = new char[N][M];
-	  INF = 500*500+1;
+    st = new StringTokenizer(br.readLine());
+    H = Integer.parseInt(st.nextToken());
+    W = Integer.parseInt(st.nextToken());
 
-	  for (int i=0; i<N; i++) {
-		String s = br.readLine();
-		for (int j=0; j<M; j++) {
-			graph[i][j] = s.charAt(j);
-			if (graph[i][j] == 'S') {
-				start_x = i;
-				start_y = j;
-			}
-			else if (graph[i][j] == 'E') {
-				end_x = i;
-				end_y = j;
-			}
-		}
-	  }
-	  System.out.println(bfs());
-	}
+    arr = new char[H][W];
+    nextWall = new int[H][W];
+    min_dis = new int[H][W];
 
-	static int bfs() {
-		PriorityQueue<Node> pq = new PriorityQueue<>();
-		pq.offer(new Node(start_x,start_y,0));
-		min_dis = new int[N][M];
-		for (int[] x : min_dis) {
-			Arrays.fill(x, INF);
-		}
-		min_dis[start_x][start_y] = 0;
+    for (int[] m : min_dis) {
+      Arrays.fill(m, 50000);
+    }
 
-		while (!pq.isEmpty()) {
-			Node cur = pq.poll();
+    for (int i = 0; i < H; i++) {
+      String s = br.readLine();
+      for (int j = 0; j < W; j++) {
+        char tmp = s.charAt(j);
+        if (tmp == 'S') {
+          sx = i;
+          sy = j;
+        } else if (tmp == 'E') {
+          ex = i;
+          ey = j;
+        }
+        arr[i][j] = tmp;
+      }
+    }
 
-			boolean currentFlag =  rockSide(cur.x, cur.y);
+    for (int i = 0; i < H; i++) {
+      for (int j = 0; j < W; j++) {
+        if (arr[i][j] != '#') {
+          isNextWall(i, j);
+        }
+      }
+    }
 
-			for (int i=0; i<4; i++) {
-				int nx = cur.x + dx[i]; 
-				int ny = cur.y + dy[i];
+    dijkstra();
 
-				if (!check(nx,ny)) continue;
-				if (graph[nx][ny] == '#') continue;
+    System.out.println(min_dis[ex][ey]);
 
-				boolean tmp = rockSide(nx, ny);
+  }
 
-				if (currentFlag && tmp ) {
-					if (min_dis[nx][ny] > min_dis[cur.x][cur.y]) {
-						min_dis[nx][ny] =  min_dis[cur.x][cur.y];
-						pq.offer(new Node(nx,ny,min_dis[nx][ny]));
-					}
-				}
+  public static void isNextWall(int x, int y) {
+    for (int i = 0; i < 4; i++) {
+      int nx = x + dx[i];
+      int ny = y + dy[i];
 
-				else  {
-					if (min_dis[nx][ny] > min_dis[cur.x][cur.y]+1) {
-						min_dis[nx][ny] =  min_dis[cur.x][cur.y]+1;
-						pq.offer(new Node(nx,ny,min_dis[nx][ny]));
-					}
-				}
-			}
-		}
-		return min_dis[end_x][end_y];
-	}
+      if (check(nx, ny)) {
+        if (arr[nx][ny] == '#') {
+          nextWall[x][y] = 1;
+          return;
+        }
+      }
+    }
+  }
 
-	static boolean rockSide(int x, int y) {
-		for (int i=0; i<4; i++) {
-			int nx = x + dx[i];
-			int ny = y + dy[i];
+  public static void dijkstra() {
+    PriorityQueue<Node> pq = new PriorityQueue<Node>((o1, o2) -> o1.cost - o2.cost);
+    min_dis[sx][sy] = 0;
+    pq.offer(new Node(sx, sy, 0));
 
-			if (!check(nx,ny)) continue;
-			if (graph[nx][ny] == '#') {
-				return true;
-			}
-		}
-		return false;
-	}
+    while (!pq.isEmpty()) {
+      Node cur = pq.poll();
 
-	static boolean check(int x, int y) {
-		if (0 <= x && x < N && 0 <= y && y <M) return true;
-		else return false;
-	}
+      if (min_dis[cur.x][cur.y] < cur.cost)
+        continue;
 
-	static class Node implements Comparable<Node>{
-		int x,y,time;
-		
-		public Node(int x, int y, int time) {
-			this.x = x;
-			this.y = y;
-			this.time = time;
-			
-		}
-		@Override
-		public int compareTo(Node o) {
-			return this.time - o.time;
-		}
-		
-	}
+      for (int i = 0; i < 4; i++) {
+        int nx = cur.x + dx[i];
+        int ny = cur.y + dy[i];
+
+        if (check(nx, ny)) {
+          if (arr[nx][ny] != '#') {
+            int w = (nextWall[cur.x][cur.y] == 1 && nextWall[nx][ny] == 1) ? 0 : 1;
+            if (min_dis[nx][ny] > cur.cost + w) {
+              min_dis[nx][ny] = cur.cost + w;
+              pq.offer(new Node(nx, ny, cur.cost + w));
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public static boolean check(int x, int y) {
+    return (0 <= x && x < H && 0 <= y && y < W);
+  }
+}
+
+class Node {
+  int x;
+  int y;
+  int cost;
+
+  public Node(int x, int y, int cost) {
+    this.x = x;
+    this.y = y;
+    this.cost = cost;
+  }
 }

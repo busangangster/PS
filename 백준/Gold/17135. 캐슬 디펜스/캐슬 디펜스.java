@@ -39,15 +39,14 @@ public class Main {
       copy();
       opp = enemies;
       kill = 0;
+      getShot = new boolean[N][M];
+
       while (true) {
-        getShot = new boolean[N][M];
         if (opp == 0)
           break;
-
         attack();
         moveAndRemove();
       }
-
       ans = Math.max(ans, kill);
       return;
     }
@@ -96,6 +95,7 @@ public class Main {
           copyArr[i][j] = 0;
           opp--;
           kill++;
+          getShot[i][j] = false;
         }
         if (copyArr[i][j] == 1 && !getShot[i][j]) {
           if (check(i + 1, j)) {

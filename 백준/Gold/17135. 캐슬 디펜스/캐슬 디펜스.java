@@ -46,6 +46,9 @@ public class Main {
           break;
         attack();
         moveAndRemove();
+
+        if (kill + opp <= ans)
+          break;
       }
       ans = Math.max(ans, kill);
       return;

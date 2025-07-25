@@ -6,7 +6,6 @@ public class Main {
   public static ArrayList<Food> arr;
   public static boolean[] selected;
   public static ArrayList<Integer> answers;
-  public static StringBuilder sb = new StringBuilder();
 
   public static void main(String[] args) throws Exception {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -49,14 +48,7 @@ public class Main {
 
   public static void subset(int cnt, int cp, int cf, int cs, int cv, int curPrice) {
     if (cnt == N) {
-      int yes = 0;
-      for (int i = 0; i < N; i++) {
-        if (selected[i]) {
-          yes++;
-        }
-      }
-
-      if (yes == 0)
+      if (curPrice > cost)
         return;
       if (possible(cp, cf, cs, cv)) {
         if (curPrice < cost) {

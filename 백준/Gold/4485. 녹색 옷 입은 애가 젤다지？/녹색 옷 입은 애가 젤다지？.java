@@ -1,89 +1,87 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-	static int n,cnt,INF;
-	static int[][] graph,min_dis;
-	static int[] dx = {-1,0,1,0};
-	static int[] dy = {0,1,0,-1};
-	static StringBuilder sb = new StringBuilder();
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		
-		cnt = 1;
-		INF = Integer.MAX_VALUE;
-		
-		while (true) {
-			n = Integer.parseInt(br.readLine());
-			if (n == 0) break;
-			else {
-				graph = new int[n][n];
-				
-				for (int i=0; i<n; i++) {
-					st = new StringTokenizer(br.readLine());
-					for (int j=0; j<n; j++) {
-						graph[i][j] = Integer.parseInt(st.nextToken());
-					}
-				}
-//				System.out.println(Arrays.deepToString(graph));
-				dijkstra(cnt);
+  public static int N, INF;
+  public static int[][] arr;
+  public static int[][] min_dis;
+  public static int[] dx = { 0, 1, 0, -1 };
+  public static int[] dy = { 1, 0, -1, 0 };
 
-			}
-			cnt++;
-			
-		}
-		System.out.println(sb);
-		
-	}
-	
-	public static void dijkstra(int cnt) {
-		PriorityQueue<Node> pq = new PriorityQueue<>(); 
-		min_dis = new int[n][n];
-		for (int[] next: min_dis) {
-			Arrays.fill(next, INF);
-		}
-		pq.offer(new Node(0,0,graph[0][0]));
-		
-		while (!pq.isEmpty()) {
-			Node cur = pq.poll();
-			
-			if (cur.x == n-1 && cur.y == n-1) {
-				sb.append("Problem").append(" ").append(cnt).append(": ").append(cur.c).append("\n");
-			}
-			
-			for (int i=0; i<4; i++) {
-				int nx = cur.x + dx[i];
-				int ny = cur.y + dy[i];
-				
-				if (check(nx,ny)) {
-					int cost = cur.c + graph[nx][ny];
-					if (min_dis[nx][ny] > cost) {
-						min_dis[nx][ny] = cost;
-						pq.offer(new Node(nx,ny,cost));
-					}
-				}
-			}
-			
-		}
-	}
-	
-	public static boolean check(int x, int y) {
-		if (0 <= x && x < n && 0 <= y && y < n) return true;
-		else return false;
-	}
-	
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st;
+    StringBuilder sb = new StringBuilder();
+
+    int cnt = 1;
+
+    while (true) {
+      N = Integer.parseInt(br.readLine());
+      if (N == 0)
+        break;
+
+      arr = new int[N][N];
+      min_dis = new int[N][N];
+      INF = 9 * 125 * 125 + 1;
+      for (int[] m : min_dis) {
+        Arrays.fill(m, INF);
+      }
+
+      for (int i = 0; i < N; i++) {
+        st = new StringTokenizer(br.readLine());
+        for (int j = 0; j < N; j++) {
+          arr[i][j] = Integer.parseInt(st.nextToken());
+        }
+      }
+
+      dijkstra();
+      sb.append("Problem " + cnt + ": " + min_dis[N - 1][N - 1]).append("\n");
+      cnt++;
+    }
+
+    System.out.println(sb);
+
+  }
+
+  public static void dijkstra() {
+    PriorityQueue<Node> pq = new PriorityQueue<Node>((o1, o2) -> o1.cost - o2.cost);
+    min_dis[0][0] = arr[0][0];
+    pq.offer(new Node(0, 0, arr[0][0]));
+
+    while (!pq.isEmpty()) {
+      Node cur = pq.poll();
+
+      if (min_dis[cur.x][cur.y] < cur.cost)
+        continue;
+
+      for (int i = 0; i < 4; i++) {
+        int nx = cur.x + dx[i];
+        int ny = cur.y + dy[i];
+
+        if (check(nx, ny)) {
+          if (min_dis[nx][ny] > cur.cost + arr[nx][ny]) {
+            min_dis[nx][ny] = cur.cost + arr[nx][ny];
+            pq.offer(new Node(nx, ny, cur.cost + arr[nx][ny]));
+          }
+        }
+      }
+
+    }
+  }
+
+  public static boolean check(int x, int y) {
+    return (0 <= x && x < N && 0 <= y && y < N);
+  }
 }
 
-class Node implements Comparable<Node>{
-	int x,y,c;
-	public Node(int x, int y, int c) {
-		this.x = x;
-		this.y = y ;
-		this.c = c;
-	}
-	@Override
-	public int compareTo(Node o) {
-		return this.c - o.c;
-	}
+class Node {
+  int x;
+  int y;
+  int cost;
+
+  public Node(int x, int y, int cost) {
+    this.x = x;
+    this.y = y;
+    this.cost = cost;
+  }
 }

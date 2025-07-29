@@ -49,17 +49,14 @@ public class Main {
       return;
     }
 
-    for (int i = 0; i < 11; i++) {
-      if (visited[i])
+    for (int pos : players.get(cnt)) {
+      if (visited[pos])
         continue;
 
-      if (players.get(cnt).contains(i)) {
-        selected[cnt] = i;
-        visited[i] = true;
-        perm(cnt + 1, sum + arr[cnt][i]);
-        visited[i] = false;
-      }
+      selected[cnt] = pos;
+      visited[pos] = true;
+      perm(cnt + 1, sum + arr[cnt][pos]);
+      visited[pos] = false;
     }
   }
-
 }

@@ -27,6 +27,7 @@ public class Main {
         arr[i][j] = s.charAt(j);
       }
     }
+
     int cur = (int) arr[0][0] - 65;
     alpha[cur] = true;
     play(0, 0, 1);
@@ -35,10 +36,7 @@ public class Main {
   }
 
   public static void play(int x, int y, int cnt) {
-    int val = (int) arr[x][y] - 65;
-    if (alpha[val]) {
-      ans = Math.max(ans, cnt);
-    }
+    ans = Math.max(ans, cnt);
 
     for (int i = 0; i < 4; i++) {
       int nx = x + dx[i];
@@ -51,7 +49,6 @@ public class Main {
           play(nx, ny, cnt + 1);
           alpha[cur] = false;
         }
-
       }
     }
   }

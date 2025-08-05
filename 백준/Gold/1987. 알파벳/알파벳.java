@@ -1,63 +1,62 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
-class Main {
-	static int R,C,max_v;
-	static char[][] graph;
+public class Main {
+  public static int N, M, ans;
+  public static char[][] arr;
+  public static boolean[] alpha;
+  public static int[] dx = { 0, 1, 0, -1 };
+  public static int[] dy = { 1, 0, -1, 0 };
 
-	static int[] dx = {0,1,0,-1};
-	static int[] dy = {1,0,-1,0};
-	static HashSet<Character> ans = new HashSet<>();
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st;
 
-		st = new StringTokenizer(br.readLine());
+    st = new StringTokenizer(br.readLine());
 
-		R = Integer.parseInt(st.nextToken());
-		C = Integer.parseInt(st.nextToken()); 
+    N = Integer.parseInt(st.nextToken());
+    M = Integer.parseInt(st.nextToken());
 
-		graph = new char[R][C];
-		max_v = Integer.MIN_VALUE;
+    arr = new char[N][M];
+    alpha = new boolean[26];
+    ans = Integer.MIN_VALUE;
 
-		for (int i=0; i<R; i++) {
-			String s = br.readLine();
-			for (int j=0; j<C; j++) {
-				graph[i][j] = s.charAt(j);
-			}
-		}
-		ans.add(graph[0][0]);
+    for (int i = 0; i < N; i++) {
+      String s = br.readLine();
+      for (int j = 0; j < M; j++) {
+        arr[i][j] = s.charAt(j);
+      }
+    }
+    int cur = (int) arr[0][0] - 65;
+    alpha[cur] = true;
+    play(0, 0, 1);
 
-		dfs(0,0,1);
-		System.out.println(max_v);
+    System.out.println(ans);
+  }
 
-	}
+  public static void play(int x, int y, int cnt) {
+    int val = (int) arr[x][y] - 65;
+    if (alpha[val]) {
+      ans = Math.max(ans, cnt);
+    }
 
-	static void dfs(int x, int y, int cnt) {
+    for (int i = 0; i < 4; i++) {
+      int nx = x + dx[i];
+      int ny = y + dy[i];
 
-		max_v = Math.max(cnt,max_v);
+      if (check(nx, ny)) {
+        int cur = (int) arr[nx][ny] - 65;
+        if (!alpha[cur]) {
+          alpha[cur] = true;
+          play(nx, ny, cnt + 1);
+          alpha[cur] = false;
+        }
 
-		for (int i=0; i<4; i++) {
-			int nx = x + dx[i];
-			int ny = y + dy[i];
+      }
+    }
+  }
 
-			if (!check(nx,ny)) continue;
-
-			if (!ans.contains(graph[nx][ny])) {
-
-				ans.add(graph[nx][ny]);
-				dfs(nx,ny,cnt+1);
-				ans.remove(graph[nx][ny]);
-
-			}
-		}
-	}
-
-	static boolean check(int x, int y) {
-		if (0 <= x && x < R && 0 <= y && y < C) return true;
-		else return false;
-	}
-
+  public static boolean check(int x, int y) {
+    return (0 <= x && x < N && 0 <= y && y < M);
+  }
 }

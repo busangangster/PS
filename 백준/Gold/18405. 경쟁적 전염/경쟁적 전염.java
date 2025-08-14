@@ -4,7 +4,6 @@ import java.io.*;
 public class Main {
   public static int N, K, S, X, Y;
   public static int[][] arr;
-  public static Node[][] copyArr;
   public static int[] dx = { 0, 1, 0, -1 };
   public static int[] dy = { 1, 0, -1, 0 };
   public static PriorityQueue<Node> pq = new PriorityQueue<>(((o1, o2) -> o1.num - o2.num));
@@ -18,17 +17,15 @@ public class Main {
     K = Integer.parseInt(st.nextToken());
 
     arr = new int[N][N];
-    copyArr = new Node[N][N];
 
     for (int i = 0; i < N; i++) {
       st = new StringTokenizer(br.readLine());
       for (int j = 0; j < N; j++) {
         int tmp = Integer.parseInt(st.nextToken());
         if (tmp != 0) {
-          pq.offer(new Node(i, j, tmp, 0));
+          pq.offer(new Node(i, j, tmp));
         }
         arr[i][j] = tmp;
-        copyArr[i][j] = new Node(i, j, tmp, 0);
       }
     }
 
@@ -37,11 +34,16 @@ public class Main {
     X = Integer.parseInt(st.nextToken());
     Y = Integer.parseInt(st.nextToken());
 
-    bfs();
-    System.out.println(copyArr[X - 1][Y - 1].num);
+    while (S-- > 0) {
+      bfs();
+    }
+
+    System.out.println(arr[X - 1][Y - 1]);
   }
 
   public static void bfs() {
+    ArrayList<Node> virus = new ArrayList<>();
+
     while (!pq.isEmpty()) {
       Node cur = pq.poll();
 
@@ -51,15 +53,15 @@ public class Main {
 
         if (check(nx, ny)) {
           if (arr[nx][ny] == 0) {
-            if (copyArr[nx][ny].time == 0 || copyArr[nx][ny].time > cur.time + 1) {
-              if (cur.time < S) {
-                copyArr[nx][ny] = new Node(nx, ny, cur.num, cur.time + 1);
-                pq.offer(new Node(nx, ny, cur.num, cur.time + 1));
-              }
-            }
+            virus.add(new Node(nx, ny, cur.num));
+            arr[nx][ny] = cur.num;
           }
         }
       }
+    }
+
+    for (Node tmp : virus) {
+      pq.offer(tmp);
     }
   }
 
@@ -72,12 +74,10 @@ class Node {
   int x;
   int y;
   int num;
-  int time;
 
-  public Node(int x, int y, int num, int time) {
+  public Node(int x, int y, int num) {
     this.x = x;
     this.y = y;
     this.num = num;
-    this.time = time;
   }
 }

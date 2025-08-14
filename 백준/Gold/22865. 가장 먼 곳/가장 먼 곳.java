@@ -1,90 +1,87 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
+
 public class Main {
-	static int N,M,A,B,C;
-	static long INF;
-	static ArrayList<ArrayList<Node>> arr;
-	static long[] min_dis;
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		
-		N = Integer.parseInt(br.readLine());
-		
-		st = new StringTokenizer(br.readLine());
-		A = Integer.parseInt(st.nextToken());
-		B = Integer.parseInt(st.nextToken());
-		C = Integer.parseInt(st.nextToken());
-		
-		M = Integer.parseInt(br.readLine());
-		
-		arr = new ArrayList<ArrayList<Node>>();
-		INF = 10000*500000+1;
-		long max_v = Long.MIN_VALUE;
-		int ans = 0;
-		
-		for (int i=0; i<=N; i++) {
-			arr.add(new ArrayList<>());
-		}
-		
-		for (int i=0; i<M; i++) {
-			st = new StringTokenizer(br.readLine());
-			int u = Integer.parseInt(st.nextToken());
-			int v = Integer.parseInt(st.nextToken());
-			int c = Integer.parseInt(st.nextToken());
-			arr.get(u).add(new Node(v,c));
-			arr.get(v).add(new Node(u,c));
-		}
-		
-		long[] fromA = dijkstra(A);
-		long[] fromB = dijkstra(B);
-		long[] fromC = dijkstra(C);
-		
-		for (int i=1; i<=N; i++) {
-			long tmp = Math.min(fromA[i], Math.min(fromB[i], fromC[i]));
-			if (tmp > max_v) {
-				max_v = tmp;
-				ans = i;
-			}
-		}
-		System.out.println(ans);
-		
-		
-	}
-	
-	static long[] dijkstra(int start) {
-		PriorityQueue<Node> pq = new PriorityQueue<>();
-		min_dis = new long[N+1];
-		Arrays.fill(min_dis, INF);
-		min_dis[start] = 0;
-		pq.offer(new Node(start,0));
-		
-		while (!pq.isEmpty()) {
-			Node cur = pq.poll();
-			
-			if (min_dis[cur.node] < cur.cost) continue;
-			
-			for (Node next: arr.get(cur.node)) {
-				if (min_dis[next.node] > cur.cost + next.cost) {
-					min_dis[next.node] = cur.cost + next.cost;
-					pq.offer(new Node(next.node, cur.cost+next.cost));
-				}
-			}
-		}
-		return min_dis;
-	}
-	
-	
-	static class Node implements Comparable<Node>{
-		int node;
-		long cost;
-		public Node(int node, long cost) {
-			this.node = node;
-			this.cost = cost;
-		}
-		@Override
-		public int compareTo(Node o) {
-			return (int) ((int)this.cost - o.cost);
-		}
-	}
+  public static int N, M;
+  public static long INF;
+  public static long[] min_dis;
+  public static ArrayList<ArrayList<Node>> arr = new ArrayList<ArrayList<Node>>();
+  public static PriorityQueue<Node> pq = new PriorityQueue<Node>((o1, o2) -> (int) o1.cost - (int) o2.cost);
+
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st;
+
+    N = Integer.parseInt(br.readLine());
+
+    INF = 10000L * 500000L + 1L;
+    min_dis = new long[N + 1];
+    Arrays.fill(min_dis, INF);
+
+    st = new StringTokenizer(br.readLine());
+    for (int i = 0; i < 3; i++) {
+      int tmp = Integer.parseInt(st.nextToken());
+      pq.offer(new Node(tmp, 0));
+      min_dis[tmp] = 0;
+    }
+
+    for (int i = 0; i <= N; i++) {
+      arr.add(new ArrayList<>());
+    }
+
+    M = Integer.parseInt(br.readLine());
+
+    for (int i = 0; i < M; i++) {
+      st = new StringTokenizer(br.readLine());
+      int a = Integer.parseInt(st.nextToken());
+      int b = Integer.parseInt(st.nextToken());
+      int c = Integer.parseInt(st.nextToken());
+      arr.get(a).add(new Node(b, c));
+      arr.get(b).add(new Node(a, c));
+    }
+
+    long distance = Long.MIN_VALUE;
+    int ans = 0;
+    dijkstra();
+    for (int i = 1; i <= N; i++) {
+      if (i == 0)
+        continue;
+
+      if (min_dis[i] == INF)
+        continue;
+
+      if (min_dis[i] > distance) {
+        distance = min_dis[i];
+        ans = i;
+      }
+    }
+    System.out.println(ans);
+  }
+
+  public static void dijkstra() {
+
+    while (!pq.isEmpty()) {
+      Node cur = pq.poll();
+
+      if (min_dis[cur.node] < cur.cost)
+        continue;
+
+      for (Node next : arr.get(cur.node)) {
+        if (min_dis[next.node] > cur.cost + next.cost) {
+          min_dis[next.node] = cur.cost + next.cost;
+          pq.offer(new Node(next.node, cur.cost + next.cost));
+        }
+      }
+    }
+  }
+}
+
+class Node {
+  int node;
+  long cost;
+
+  public Node(int node, long cost) {
+    this.node = node;
+    this.cost = cost;
+  }
 }

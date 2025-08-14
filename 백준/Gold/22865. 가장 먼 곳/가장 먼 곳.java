@@ -6,7 +6,7 @@ public class Main {
   public static long INF;
   public static long[] min_dis;
   public static ArrayList<ArrayList<Node>> arr = new ArrayList<ArrayList<Node>>();
-  public static PriorityQueue<Node> pq = new PriorityQueue<Node>((o1, o2) -> (int) o1.cost - (int) o2.cost);
+  public static PriorityQueue<Node> pq = new PriorityQueue<Node>((o1, o2) -> (int) (o1.cost - o2.cost));
 
   public static void main(String[] args) throws Exception {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

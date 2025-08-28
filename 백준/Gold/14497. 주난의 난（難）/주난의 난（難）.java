@@ -35,12 +35,11 @@ public class Main {
         arr[i][j] = s.charAt(j);
       }
     }
-    // int res = dijkstra();
-    dijkstra();
-    System.out.println(min_dis[tx][ty]);
+    int res = dijkstra();
+    System.out.println(res);
   }
 
-  public static void dijkstra() {
+  public static int dijkstra() {
     PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> o1.cost - o2.cost);
     min_dis[sx][sy] = 0;
     pq.offer(new Node(sx, sy, 0));
@@ -51,9 +50,9 @@ public class Main {
       if (min_dis[cur.x][cur.y] < cur.cost)
         continue;
 
-      // if (cur.x == tx && cur.y == ty) {
-      // return cur.cost;
-      // }
+      if (cur.x == tx && cur.y == ty) {
+        return cur.cost;
+      }
 
       for (int i = 0; i < 4; i++) {
         int nx = cur.x + dx[i];
@@ -75,7 +74,7 @@ public class Main {
       }
 
     }
-    // return -1;
+    return -1;
   }
 
   public static boolean check(int x, int y) {

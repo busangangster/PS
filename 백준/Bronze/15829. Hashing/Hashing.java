@@ -7,14 +7,18 @@ public class Main {
     StringTokenizer st;
 
     long res = 0L;
-    int mod = 1234567891;
+    long mod = 1234567891L;
+    long k = 1L;
 
     int n = Integer.parseInt(br.readLine());
     String s = br.readLine();
     for (int i = 0; i < n; i++) {
-      int tmp = (int) s.charAt(i) - 96;
-      res += tmp * (Math.pow(31, i) % mod);
+      long tmp = s.charAt(i) - 'a' + 1;
+
+      res += (tmp * k) % mod;
       res %= mod;
+      k *= 31L;
+      k %= mod;
     }
     System.out.println(res % mod);
   }

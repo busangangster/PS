@@ -11,22 +11,23 @@ public class Main {
 
     int cnt = 0;
 
-    st = new StringTokenizer(br.readLine());
-    for (int i = 0; i < n; i++) {
-      boolean yes = true;
-      int tmp = Integer.parseInt(st.nextToken());
+    boolean[] prime = new boolean[1001];
 
-      if (tmp == 1)
-        yes = false;
-      for (int j = 2; j < tmp; j++) {
-        if (tmp % j == 0) {
-          yes = false;
-          break;
+    Arrays.fill(prime, true);
+    prime[1] = false;
+
+    for (int i = 2; i <= 1000; i++) {
+      if (prime[i]) {
+        for (int j = i + i; j <= 1000; j += i) {
+          prime[j] = false;
         }
       }
-      if (yes) {
+    }
+
+    st = new StringTokenizer(br.readLine());
+    for (int i = 0; i < n; i++) {
+      if (prime[Integer.parseInt(st.nextToken())])
         cnt++;
-      }
     }
 
     System.out.println(cnt);

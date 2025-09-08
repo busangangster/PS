@@ -8,23 +8,21 @@ public class Main {
     StringBuilder sb = new StringBuilder();
 
     int n = Integer.parseInt(br.readLine());
+    int answer = 0;
 
     for (int i = 1; i <= 1000000; i++) {
       int res = i;
-      int tmp = i;
-
-      while (tmp > 0) {
+      for (int tmp = i; tmp > 0; tmp /= 10) {
         res += tmp % 10;
-        tmp = tmp / 10;
       }
 
       if (res == n) {
-        System.out.println(i);
-        System.exit(0);
+        answer = i;
+        break;
       }
     }
 
-    System.out.println(0);
+    System.out.println(answer);
 
   }
 }

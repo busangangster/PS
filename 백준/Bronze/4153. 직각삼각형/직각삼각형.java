@@ -1,35 +1,31 @@
-import java.io.*;
 import java.util.*;
- 
-class Main {
+import java.io.*;
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
+public class Main {
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st;
+    StringBuilder sb = new StringBuilder();
 
-		while (true) {
-			st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			int c = Integer.parseInt(st.nextToken());
-			if (a == 0 && b == 0 && c ==0) break;
-			int[] arr = new int[3];
-			arr[0] = a;
-			arr[1] = b;
-			arr[2] = c;
+    while (true) {
+      st = new StringTokenizer(br.readLine());
+      int[] arr = new int[3];
+      for (int i = 0; i < 3; i++) {
+        arr[i] = Integer.parseInt(st.nextToken());
+      }
 
-			Arrays.sort(arr);
-			int first = arr[0]*arr[0];
-			int second = arr[1]*arr[1];
-			int third = arr[2]*arr[2];
-			if (first+second == third) {
-				sb.append("right");
-			}
-			else sb.append("wrong");
-			sb.append("\n");
-			
-		}
-		System.out.println(sb);
-	}
+      if (arr[2] == 0)
+        break;
+
+      Arrays.sort(arr);
+
+      if (Math.pow(arr[2], 2) == Math.pow(arr[0], 2) + Math.pow(arr[1], 2)) {
+        sb.append("right");
+      } else
+        sb.append("wrong");
+      sb.append("\n");
+    }
+
+    System.out.println(sb);
+  }
 }

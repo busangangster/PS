@@ -21,14 +21,8 @@ public class Main {
       }
     }
 
-    sums[1][1] = arr[1][1];
-    for (int i = 2; i <= N; i++) {
-      sums[i][1] = arr[i][1] + sums[i - 1][1];
-      sums[1][i] = arr[1][i] + sums[1][i - 1];
-    }
-
-    for (int i = 2; i <= N; i++) {
-      for (int j = 2; j <= N; j++) {
+    for (int i = 1; i <= N; i++) {
+      for (int j = 1; j <= N; j++) {
         sums[i][j] = sums[i - 1][j] + sums[i][j - 1] + arr[i][j] - sums[i - 1][j -
             1];
       }
@@ -45,6 +39,7 @@ public class Main {
           1][y1 - 1];
       sb.append(res).append("\n");
     }
+      
     System.out.println(sb);
 
   }

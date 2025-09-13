@@ -38,33 +38,30 @@ public class Main {
       int[] cur = q.poll();
       int a = cur[0];
       int b = cur[1];
-      int c = size[2] - a - b;
+      int c = size[2] - a - b; // 중요
 
       if (a == 0)
         possibleC[c] = true;
 
-      int[] res = { a, b, c };
-      for (int[] tmp : possibleCase) {
+      int[] res = { a, b, c }; // 각각의 물통이 현재 가지고 있는 물의 양
+      for (int[] tmp : possibleCase) { // 물 이동 경우의 수
         int from = tmp[0];
         int to = tmp[1];
 
-        if (res[from] == 0)
+        if (res[from] == 0) // 옮길 물이 없으면 확인 X
           continue;
 
         int[] next = res.clone();
-        int water = Math.min(res[from], size[to] - res[to]);
+        int water = Math.min(res[from], size[to] - res[to]); // 물이 모자라거나, 넘치지 않게 하기 위한 min값
 
         next[from] -= water;
         next[to] += water;
 
-        int na = next[0];
-        int nb = next[1];
-        if (!visited[na][nb]) {
-          visited[na][nb] = true;
-          q.offer(new int[] { na, nb });
+        if (!visited[next[0]][next[1]]) {
+          visited[next[0]][next[1]] = true;
+          q.offer(new int[] { next[0], next[1] });
         }
       }
     }
-
   }
 }

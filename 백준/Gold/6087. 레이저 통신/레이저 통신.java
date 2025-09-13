@@ -77,6 +77,8 @@ public class Main {
 
         if (check(nx, ny)) {
           if (arr[nx][ny] != '*') {
+            if ((cur.d + 2) % 4 == i)
+              continue;
             if (cur.d == i) {
               if (min_dis[nx][ny][i] > cur.cost) {
                 min_dis[nx][ny][i] = cur.cost;

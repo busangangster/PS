@@ -1,30 +1,29 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
-class Main {
+public class Main {
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st;
 
-		st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
-		int K = Integer.parseInt(st.nextToken());
+    st = new StringTokenizer(br.readLine());
+    int N = Integer.parseInt(st.nextToken());
+    int K = Integer.parseInt(st.nextToken());
 
-		Integer[] arr = new Integer[N];
+    int[] arr = new int[N];
+    for (int i = 0; i < N; i++) {
+      arr[i] = Integer.parseInt(br.readLine());
+    }
 
-		for (int i = 0; i < N; i++) {
-			arr[i] = Integer.parseInt(br.readLine());
-		}
+    int cnt = 0;
 
-		Arrays.sort(arr, Collections.reverseOrder());
+    for (int i = N - 1; i >= 0; i--) {
+      cnt += K / arr[i];
+      K %= arr[i];
+    }
 
-		int cnt = 0;
+    System.out.println(cnt);
 
-		for (int i = 0; i < N; i++) {
-			cnt += K / arr[i];
-			K = K % arr[i];
-		}
-		System.out.println(cnt);
-	}
+  }
 }

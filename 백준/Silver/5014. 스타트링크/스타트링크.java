@@ -3,7 +3,7 @@ import java.io.*;
 
 public class Main {
   public static int F, S, G, U, D;
-  public static int[] arr, move;
+  public static int[] move;
   public static boolean[] visited;
 
   public static void main(String[] args) throws Exception {
@@ -17,7 +17,6 @@ public class Main {
     U = Integer.parseInt(st.nextToken());
     D = Integer.parseInt(st.nextToken());
 
-    arr = new int[F + 1];
     visited = new boolean[F + 1];
 
     move = new int[] { U, -D };

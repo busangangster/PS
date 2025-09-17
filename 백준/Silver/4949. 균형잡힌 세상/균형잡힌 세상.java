@@ -5,7 +5,6 @@ public class Main {
 
   public static void main(String[] args) throws Exception {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    StringTokenizer st;
     StringBuilder sb = new StringBuilder();
 
     while (true) {
@@ -16,28 +15,34 @@ public class Main {
       }
 
       Stack<Character> stack = new Stack<>();
+      boolean flag = true;
 
       for (int i = 0; i < s.length(); i++) {
         char tmp = s.charAt(i);
         if (tmp == '(' || tmp == '[') {
           stack.push(tmp);
         } else if (tmp == ')') {
-          if (!stack.isEmpty() && stack.peek() == '(') {
+          if (stack.isEmpty() || stack.peek() != '(') {
+            flag = false;
+            break;
+          } else {
             stack.pop();
-          } else
-            stack.push(tmp);
+          }
         } else if (tmp == ']') {
-          if (!stack.isEmpty() && stack.peek() == '[') {
+          if (stack.isEmpty() || stack.peek() != '[') {
+            flag = false;
+            break;
+          } else {
             stack.pop();
-          } else
-            stack.push(tmp);
+          }
         }
       }
 
-      if (!stack.isEmpty()) {
+      if (!flag || !stack.isEmpty()) {
         sb.append("no");
       } else
         sb.append("yes");
+
       sb.append("\n");
 
     }

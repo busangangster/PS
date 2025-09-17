@@ -1,45 +1,34 @@
 import java.util.*;
 import java.io.*;
+
 public class Main {
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
-		
-		st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
-		int K = Integer.parseInt(st.nextToken());
-		Queue<Integer> q = new ArrayDeque<Integer>();
-		ArrayList<Integer> ans = new ArrayList<>();
-		
-		for (int i=1; i<=N;i++) {
-			q.add(i);
-		}
-		
-		int cnt = 1;
-		while (!q.isEmpty()) {
-			if (cnt == K) {
-				ans.add(q.poll());
-				cnt = 1;
-			}
-			else {
-				q.add(q.poll());
-				cnt++;
-			}
 
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st;
+    StringBuilder sb = new StringBuilder();
 
-		}
-		sb.append("<");
-		for (int i=0; i<N; i++) {
-			if (i == N-1) {
-				sb.append(ans.get(i));
-			}
-			else {
-				sb.append(ans.get(i)).append(", ");
+    sb.append("<");
 
-			}
-		}
-		sb.append(">");
-		System.out.println(sb);
-	}
+    st = new StringTokenizer(br.readLine());
+    int n = Integer.parseInt(st.nextToken());
+    int k = Integer.parseInt(st.nextToken());
+
+    Queue<Integer> q = new ArrayDeque<>();
+    for (int i = 1; i <= n; i++) {
+      q.offer(i);
+    }
+
+    while (q.size() != 1) {
+      for (int i = 0; i < k - 1; i++) {
+        q.offer(q.poll());
+      }
+
+      sb.append(q.poll()).append(", ");
+    }
+
+    sb.append(q.peek()).append(">");
+    System.out.println(sb);
+
+  }
 }

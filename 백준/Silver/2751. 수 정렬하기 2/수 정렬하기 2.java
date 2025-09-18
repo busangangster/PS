@@ -1,24 +1,22 @@
-import java.io.*;
 import java.util.*;
- 
-class Main {
+import java.io.*;
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
+public class Main {
 
-		int  n = Integer.parseInt(br.readLine());
-		
-		int[] arr = new int[n];
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2) -> o1 - o2);
+    StringBuilder sb = new StringBuilder();
 
-		for (int i=0; i<n; i++) {
-			arr[i] = Integer.parseInt(br.readLine());
-		}
-		Arrays.sort(arr);
-		for (int x: arr) {
-			sb.append(x).append("\n");
-		}
-		System.out.println(sb);
-	}
+    int n = Integer.parseInt(br.readLine());
+    for (int i = 0; i < n; i++) {
+      pq.offer(Integer.parseInt(br.readLine()));
+    }
+
+    while (!pq.isEmpty()) {
+      sb.append(pq.poll()).append("\n");
+    }
+
+    System.out.println(sb);
+  }
 }

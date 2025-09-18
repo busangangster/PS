@@ -1,6 +1,6 @@
 # [level 1] 잡은 물고기의 평균 길이 구하기 - 293259 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/293259#qna) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/293259) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 10월 11일 01:18:36
+2025년 09월 18일 18:06:49
 
 ### 문제 설명
 

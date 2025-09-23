@@ -1,45 +1,42 @@
-import java.io.*;
 import java.util.*;
-public class Main {
+import java.io.*;
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
-		
-		PriorityQueue<Pos> pq = new PriorityQueue<>();
-		
-		int N = Integer.parseInt(br.readLine());
-		
-		for (int i=0; i<N; i++) {
-			int tmp = Integer.parseInt(br.readLine());
-			if (tmp == 0) {
-				if (pq.isEmpty()) {
-					sb.append(0);
-				}
-				else {
-					sb.append(pq.poll().y);
-				}
-				sb.append("\n");
-			}
-			else {
-				pq.offer(new Pos(Math.abs(tmp),tmp));
-			}
-		}
-		System.out.println(sb);
-	}
-	static class Pos implements Comparable<Pos>{
-		int x,y;
-		public Pos(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-		@Override
-		public int compareTo(Pos o) {
-			if (this.x == o.x) {
-				return this.y - o.y;
-			}
-			return this.x - o.x;
-		}
-	}
+public class Main {
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringBuilder sb = new StringBuilder();
+
+    PriorityQueue<Node> pq = new PriorityQueue<>();
+    int n = Integer.parseInt(br.readLine());
+    for (int i = 0; i < n; i++) {
+      int tmp = Integer.parseInt(br.readLine());
+      if (tmp == 0) {
+        if (pq.isEmpty())
+          sb.append(0);
+        else
+          sb.append(pq.poll().node);
+        sb.append("\n");
+      } else {
+        pq.offer(new Node(tmp));
+      }
+    }
+    System.out.println(sb);
+  }
+}
+
+class Node implements Comparable<Node> {
+  int node;
+
+  public Node(int node) {
+    this.node = node;
+  }
+
+  @Override
+  public int compareTo(Node o) {
+    if (Math.abs(this.node) == Math.abs(o.node)) {
+      return this.node - o.node;
+    }
+    return Math.abs(this.node) - Math.abs(o.node);
+  }
+
 }
